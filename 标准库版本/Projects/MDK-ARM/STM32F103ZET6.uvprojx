@@ -469,9 +469,9 @@
           <GroupName>BSP</GroupName>
           <Files>
             <File>
-              <FileName>DS18B20.c</FileName>
+              <FileName>ds18b20.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Drivers\BSP\src\DS18B20.c</FilePath>
+              <FilePath>..\..\Drivers\BSP\src\ds18b20.c</FilePath>
             </File>
           </Files>
         </Group>

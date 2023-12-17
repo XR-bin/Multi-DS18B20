@@ -1,4 +1,5 @@
 ..\..\output\led.o: ..\..\Drivers\BSP\src\led.c
+..\..\output\led.o: ..\..\Drivers\BSP\inc\led.h
 ..\..\output\led.o: ..\..\Drivers\SYSTEM\inc\sys.h
 ..\..\output\led.o: ..\..\Drivers\Libraries\CMSIS\stm32f10x.h
 ..\..\output\led.o: ..\..\Drivers\Libraries\CMSIS\core_cm3.h

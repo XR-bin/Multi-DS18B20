@@ -1,12 +1,11 @@
-#include "DS18B20.h"
-#include "delay.h"
+#include "ds18b20.h"
 
 
 
 /**
 ******************************************************************************
-* @file      ：.\Drivers\BSP\src\DS18B20.c
-*              .\Drivers\BSP\inc\DS18B20.h
+* @file      ：.\Drivers\BSP\src\ds18b20.c
+*              .\Drivers\BSP\inc\ds18b20.h
 * @author    ：XRbin
 * @version   ：V1.0
 * @date      ：2023-06-16
@@ -34,7 +33,7 @@ void DS18B20_Init(void)
 {
     /* GPIOG时能时钟 */
     RCC->APB2ENR |= 1<<8;
-    
+
     /* 端口配置寄存器 */
     /* 推挽输出   100MHz */
     GPIOG->CRH &= ~(0xf<<4*(11-8));
@@ -83,7 +82,7 @@ uint8_t DS18B20_ACK(void)
     uint8_t temp = 60;
 
     DQ_IN;/* DQ进入输入模式 */
-    
+
     /* DS18B20会等待15~60us后给单片机应答 */
     while(DQ_ACK)
     {
@@ -91,9 +90,9 @@ uint8_t DS18B20_ACK(void)
         if(temp == 60) return ack;
         delay_us(1);
     }
-    
+
     temp = 240;
-    
+
     /* DS18B20会将DQ拉低60~240us来作为应答 */
     while(temp--)
     {
@@ -124,7 +123,7 @@ void DS18B20_Write_Byte(uint8_t data)
 
     /* DQ进入输出模式 */
     DQ_OUT;
-    
+
     for(i=0;i<8;i++)
     {
         DQ_L;                    /* 拉低DQ，持续10~15us */
@@ -137,7 +136,7 @@ void DS18B20_Write_Byte(uint8_t data)
 
         DQ_H;                    /* DQ释放，持续1us */
         delay_us(1);
-        
+
         data >>= 1;              /* 要发送的数据右移一位 */
     }
 }
@@ -155,21 +154,21 @@ void DS18B20_Write_Byte(uint8_t data)
 uint8_t DS18B20_Read_Bit(void)
 {
     uint8_t data;
-    
+
     DQ_OUT;              /* DQ进入输出模式 */
-    
+
     DQ_L; 
     delay_us(2);
     DQ_H;
-    
+
     DQ_IN;               /* DQ进入输入模式 */
     delay_us(12);
-    
+
     if(DQ_READ)data=1;   /* 读取一个bit的数据 */
     else data=0;
-    
+
     delay_us(50);
-    
+
     return data;
 }
 
@@ -191,7 +190,7 @@ uint8_t DS18B20_Read_Byte(void)
     for(i=0;i<8;i++)
     {
         DQ_OUT;                     /* DQ进入输出模式 */
-        
+
         DQ_L;                       /* 拉低DQ持续1us */
         delay_us(1);
 
@@ -206,7 +205,7 @@ uint8_t DS18B20_Read_Byte(void)
         DQ_H;                       /* DQ释放，持续1us */
         delay_us(2);
     }
-    
+
     return data;
 }
 
@@ -248,7 +247,7 @@ int16_t DS18B20_Read_Temperature(void)
     data *= 0.625;
 
     printf("%f\r\n",(float)data/10);
-    
+
     return data;
 }
 
@@ -271,14 +270,14 @@ void DS18B20_SingleAddr(uint8_t* arr)
 
     DS18B20_RST();
     DS18B20_Write_Byte(0x33);
-    
+
     for(i=0;i<8;i++)
     arr[i] = DS18B20_Read_Byte();
 
     printf("单线系列编码：%d\r\n",arr[0]);
     printf("地址：");
     for(i=1;i<7;i++) printf("%d ",arr[i]);
-    
+
     printf("\r\n");
     printf("CRC校验码：%d\r\n",arr[7]);
 }
@@ -294,21 +293,21 @@ void DS18B20_SingleAddr(uint8_t* arr)
 * @fn       ：
 ************************************************************/
 uint8_t DS18B20_Read2Bit(void)
-{  
+{
     uint8_t i;
     uint8_t data = 0;
 
     for(i=0;i<2;i++)
     {
         data <<= 1;                    /* 左移一位 */
-        
+
         DQ_OUT;                        /* DQ进入输出模式 */
-        
+
         DQ_L;                          /* 拉低DQ持续1us */
         delay_us(1);
         DQ_H;                          /* 拉高DQ持续13us */
         delay_us(12);
-        
+
         DQ_IN;                         /* DQ进入输入模式 */
 
         if(DQ_READ) data |= 0x01;      /* 读取数据 持续45us */
@@ -317,7 +316,7 @@ uint8_t DS18B20_Read2Bit(void)
         DQ_H;                          /* DQ释放，持续1us */
         delay_us(2);
     }
-    
+
     return data;
 }
 
@@ -416,7 +415,8 @@ void DS18B20_MultiAddr_Test(void)
 /**********************************************************
 * @funcName ：DS18B20_MultiAddr  (正式版ROM搜索函数函数) 
 * @brief    ：搜索一条总线上DS18B20的个数，并获取它们的ROM数据(系列号、器件地址、CRC校验码)
-* @param    ：uint8_t (*buff)[8], uint8_t *num
+* @param    ：uint8_t (*buff)[8]
+* @param    ：uint8_t *num
 * @retval   ：void
 * @details  ：
 *            0xf0 --- 搜索一条总线上所有DS18B20内部的ROM
@@ -437,7 +437,7 @@ void DS18B20_MultiAddr(uint8_t (*buff)[8], uint8_t *num)
     {
         DS18B20_RST();              /* 复位DS18B20总线 */
         DS18B20_Write_Byte(0xf0);   /* 发送搜索ROM */
-        
+
         for(i=0;i<8;i++)
         {
             for(j=0;j<8;j++)
@@ -551,7 +551,7 @@ int16_t DS18B20_Addr_Temperature(uint8_t* address)
         DS18B20_Write_Byte(address[i]);
     }
     DS18B20_Write_Byte(0x44);   /* 启动温度数据转换 */
-    
+
     DS18B20_RST();
     DS18B20_Write_Byte(0x55);
     for(i=0; i<8; i++)
@@ -559,7 +559,7 @@ int16_t DS18B20_Addr_Temperature(uint8_t* address)
         DS18B20_Write_Byte(address[i]);
     }
     DS18B20_Write_Byte(0xbe);     /* 读取温度数据 */
-    
+
     data_l = DS18B20_Read_Byte(); /* 获取温度数据低位 */
     data_h = DS18B20_Read_Byte(); /* 获取温度数据高位 */
 

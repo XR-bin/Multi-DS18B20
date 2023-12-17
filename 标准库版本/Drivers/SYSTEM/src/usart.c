@@ -16,11 +16,11 @@ void USART1_Init(uint32_t baud)
 {
     GPIO_InitTypeDef  GPIO_InitStruct;     /* GPIOx配置结构体 */
     USART_InitTypeDef USART_InitStruct;    /* USARTx配置结构体 */
-    NVIC_InitTypeDef   NVIC_InitStruct;    /* NVIC(中断)配置结构体 */
-  
+//    NVIC_InitTypeDef   NVIC_InitStruct;    /* NVIC(中断)配置结构体 */
+
     /* 时钟使能   GPIOA   USART1 */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_USART1,ENABLE); 
-  
+
     /* GPIOx初始化设置 */
     /* GPIOx端口配置 */
     /* PA9   USART1_TX ----- 复用串口输出 */
@@ -33,7 +33,7 @@ void USART1_Init(uint32_t baud)
     GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_IN_FLOATING;  /* 浮空输入 */
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;       /* IO口速度为50MHz */
     GPIO_Init(GPIOA, &GPIO_InitStruct);                  /* 根据设定参数初始化PA10 */
-  
+
     /* USART 初始化设置 */
     /* USART1配置 */
     USART_InitStruct.USART_BaudRate      = baud;                 /* 波特率设置(USART->BRR寄存器) */
@@ -46,15 +46,16 @@ void USART1_Init(uint32_t baud)
 
     /* NVIC配置 */
     /* 选择中断方式并使能该方式中断 */
-    // USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);           /* 读取数据寄存器不为空(接收完成)中断 (USART->CR1的第5位) */
+//    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);             /* 读取数据寄存器不为空(接收完成)中断 (USART->CR1的第5位) */
+//    USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);             /* 检测到空闲线路(空闲)中断 (USART->CR1的第4位) */
 
     /* 串口中断配置 */
-    NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQn;           /* 选择串口1中断 */
-    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 3;   /* 抢占优先级3 */
-    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 3;          /* 子优先级3 */
-    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;             /* IRQ通道使能 */
-    NVIC_Init(&NVIC_InitStruct);                             /* 串口1中断初始化 */
-  
+//    NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQn;           /* 选择串口1中断 */
+//    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 1;   /* 抢占优先级1 */
+//    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 1;          /* 子优先级1 */
+//    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;             /* IRQ通道使能 */
+//    NVIC_Init(&NVIC_InitStruct);                             /* 串口1中断初始化 */
+
     /* 使能串口1 */
     USART_Cmd(USART1, ENABLE);
 }

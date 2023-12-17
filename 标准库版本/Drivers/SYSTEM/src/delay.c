@@ -21,7 +21,7 @@ void SysTick_Init(void)
 /**********************************************************
 * @funcName ：delay_us
 * @brief    ：系统滴答定时器微秒延时
-* @param    ：uint32_t us
+* @param    ：uint32_t us (微秒)
 * @retval   ：void
 * @details  ：
 * @fn       ：
@@ -40,7 +40,7 @@ void delay_us(uint32_t us)
 /**********************************************************
 * @funcName ：delay1_ms
 * @brief    ：系统滴答定时器微秒延时
-* @param    ：uint16_t ms
+* @param    ：uint16_t ms (毫秒)
 * @retval   ：void
 * @details  ：
 * @fn       ：
@@ -59,7 +59,7 @@ void delay1_ms(uint16_t ms)
 /**********************************************************
 * @funcName ：delay_ms
 * @brief    ：系统滴答定时器微秒延时(修改版)
-* @param    ：uint16_t ms
+* @param    ：uint16_t ms (毫秒)
 * @retval   ：void
 * @details  ：
 * @fn       ：
@@ -67,6 +67,7 @@ void delay1_ms(uint16_t ms)
 void delay_ms(uint16_t ms)
 {
     uint16_t i,n=0;
+
     if(ms <= 1864)
     {
         delay1_ms(ms);

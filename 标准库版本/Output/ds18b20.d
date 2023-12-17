@@ -1,5 +1,5 @@
-..\..\output\ds18b20.o: ..\..\Drivers\BSP\src\DS18B20.c
-..\..\output\ds18b20.o: ..\..\Drivers\BSP\inc\DS18B20.h
+..\..\output\ds18b20.o: ..\..\Drivers\BSP\src\ds18b20.c
+..\..\output\ds18b20.o: ..\..\Drivers\BSP\inc\ds18b20.h
 ..\..\output\ds18b20.o: ..\..\Drivers\SYSTEM\inc\sys.h
 ..\..\output\ds18b20.o: ..\..\Drivers\Libraries\CMSIS\stm32f10x.h
 ..\..\output\ds18b20.o: ..\..\Drivers\Libraries\CMSIS\core_cm3.h
@@ -30,5 +30,5 @@
 ..\..\output\ds18b20.o: ..\..\Drivers\Libraries\FWlib\inc\stm32f10x_usart.h
 ..\..\output\ds18b20.o: ..\..\Drivers\Libraries\FWlib\inc\stm32f10x_wwdg.h
 ..\..\output\ds18b20.o: ..\..\Drivers\Libraries\FWlib\inc\misc.h
-..\..\output\ds18b20.o: D:\study\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\..\output\ds18b20.o: ..\..\Drivers\SYSTEM\inc\delay.h
+..\..\output\ds18b20.o: D:\study\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

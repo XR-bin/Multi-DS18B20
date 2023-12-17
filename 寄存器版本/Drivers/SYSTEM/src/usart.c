@@ -5,7 +5,7 @@
 /**********************************************************
 * @funcName ：USART1_Init
 * @brief    ：对USART1对应的GPIO口进行初始化设置
-* @param    ：u32 baud
+* @param    ：uint32_t baud (波特率)
 * @retval   ：void
 * @details  ：
 *             PA9     TX     ---------输出
@@ -14,15 +14,16 @@
 ************************************************************/
 void USART1_Init(uint32_t baud)
 {
-    uint8_t pri;
+//    uint32_t pri;
+
     /* GPIOx初始化设置 */
     /* GPIOx时钟使能 */
     RCC->APB2ENR |= (1<<2);
-  
+
     /* 端口配置寄存器 */
     GPIOA->CRH &= ~((0xf<<4*(9-8))|(0xf<<4*(10-8)));
     GPIOA->CRH |= ((11<<4*(9-8))|(4<<4*(10-8)));
-  
+
     /* 复用重映射寄存器 */
     AFIO->MAPR &= ~(1<<2);
 
@@ -39,8 +40,8 @@ void USART1_Init(uint32_t baud)
     USART1->CR1 |= ((1<<2)|(1<<3));
 
     /* 串口中断触发形式（CR1设置）*/
-    USART1->CR1 |= (1<<5);
-    USART1->CR1 |= (1<<4);
+//    USART1->CR1 |= (1<<5);             /* 接收完成中断使能 */
+//    USART1->CR1 |= (1<<4);             /* 空闲中断使能 */
 
     /* 控制寄存器CR2 */
     USART1->CR2 &= ~(3<<12);
@@ -51,11 +52,12 @@ void USART1_Init(uint32_t baud)
     /* NVIC配置 */
     /* 优先级分组(在主函数里写) */
     /* 计算优先级编码值 */
-    pri = NVIC_EncodePriority (5, 1, 2);  /* 第五分组形式，抢占1级，响应2级 */
+    /* 5--101  2号分组方案 2 位抢占优先级， 2 位响应优先级 */
+//    pri = NVIC_EncodePriority(5, 1, 1);     /* 该中断抢占优先为1，子优先级为1 */
     /* 将编码值写入具体中断源 */
-    NVIC_SetPriority(USART1_IRQn,pri);
+//    NVIC_SetPriority(USART1_IRQn,pri);
     /* 使能NVIC响应通道 */
-    NVIC_EnableIRQ(USART1_IRQn); 
+//    NVIC_EnableIRQ(USART1_IRQn);
 
     /* 串口使能 */
     USART1->CR1 |= (1<<13);
@@ -133,9 +135,11 @@ void USART1_Receive_Str(uint8_t *str)
     {
         while(!(USART1->SR & (1<<5)));
         *str = USART1->DR;
-        if(*str == '#')
+        if(*str == '\r')
         {
-            break;
+            while(!(USART1->SR & (1<<5)));
+            *str = USART1->DR;
+            if(*str == '\n') break;
         }
         str++;
     }
@@ -147,7 +151,7 @@ void USART1_Receive_Str(uint8_t *str)
 /**********************************************************
 * @funcName ：USART2_Init
 * @brief    ：对USART2对应的GPIO口进行初始化设置
-* @param    ：uint32_t baud
+* @param    ：uint32_t baud (波特率)
 * @retval   ：void
 * @details  ：
 *            PA2     TX     ---------输出
@@ -156,12 +160,12 @@ void USART1_Receive_Str(uint8_t *str)
 ************************************************************/
 void USART2_Init(uint32_t baud)
 {
-    uint8_t pri;
+//    uint32_t pri;
 
     /* GPIOx初始化设置 */
     /* GPIOx时钟使能 */
     RCC->APB2ENR |= (1<<2);
-  
+
     /* 端口配置寄存器 */
     GPIOA->CRL &= ~((0xf<<4*2)|(0xf<<4*3));
     GPIOA->CRL |= ((11<<4*2)|(4<<4*3));
@@ -176,15 +180,15 @@ void USART2_Init(uint32_t baud)
     /* 串口寄存器初始化设置 */
     /* 串口时钟使能 */
     RCC->APB1ENR |= (1<<17);
-  
+
     /* 控制寄存器CR1 */
     USART2->CR1 &= ~(1<<12);
     USART2->CR1 |= ((1<<2)|(1<<3));
 
     /* 串口中断触发形式（CR1设置） */
-    USART2->CR1 |= (1<<5);
-//    USART2->CR1 |= (1<<4);
-  
+//    USART2->CR1 |= (1<<5);             /* 接收完成中断使能 */
+//    USART2->CR1 |= (1<<4);             /* 空闲中断使能 */
+
     /* 控制寄存器CR2 */
     USART2->CR2 &= ~(3<<12);
 
@@ -194,11 +198,12 @@ void USART2_Init(uint32_t baud)
     /* NVIC配置 */
     /* 优先级分组(在主函数里写) */
     /* 计算优先级编码值 */
-    pri = NVIC_EncodePriority (5, 1, 1);  /* 第五分组形式，抢占1级，响应2级 */
+    /* 5--101  2号分组方案 2 位抢占优先级， 2 位响应优先级 */
+//    pri = NVIC_EncodePriority(5, 1, 1);     /* 该中断抢占优先为1，子优先级为1 */
     /* 将编码值写入具体中断源 */
-    NVIC_SetPriority(USART2_IRQn,pri);
+//    NVIC_SetPriority(USART2_IRQn,pri);
     /* 使能NVIC响应通道 */
-    NVIC_EnableIRQ(USART2_IRQn); 
+//    NVIC_EnableIRQ(USART2_IRQn); 
 
     /* 串口使能 */
     USART2->CR1 |= (1<<13);

@@ -32,4 +32,4 @@
 ..\..\output\main.o: ..\..\Drivers\SYSTEM\inc\delay.h
 ..\..\output\main.o: ..\..\Drivers\SYSTEM\inc\usart.h
 ..\..\output\main.o: D:\study\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-..\..\output\main.o: ..\..\Drivers\BSP\inc\DS18B20.h
+..\..\output\main.o: ..\..\Drivers\BSP\inc\ds18b20.h

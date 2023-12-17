@@ -4,6 +4,8 @@
     /****************   外部头文件声明   ****************/
     #include "stm32f10x.h"
 
+
+
     /********************   宏定义   ********************/
     /* 位带操作,实现51类似的GPIO控制功能 */
     /* 具体实现思想,参考<<CM3权威指南>>第五章(87页~92页). */
@@ -27,7 +29,7 @@
     #define GPIOE_IDR_Addr    (GPIOE_BASE+8) /* 0x40011808 */
     #define GPIOF_IDR_Addr    (GPIOF_BASE+8) /* 0x40011A08 */
     #define GPIOG_IDR_Addr    (GPIOG_BASE+8) /* 0x40011E08 */
-     
+
     /* IO口操作,只对单一的IO口! */
     /* 确保n的值小于16! */
     #define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  /* 输出 */
@@ -51,7 +53,9 @@
     #define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)  /* 输出 */
     #define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)  /* 输入 */
 
-    /****************    函数外部声明   ****************/
+
+
+    /****************    函数外部声明   *****************/
     /* 以下为汇编函数 */
     void WFI_SET(void);           /* 执行WFI指令 */
     void INTX_DISABLE(void);      /* 关闭所有中断 */
